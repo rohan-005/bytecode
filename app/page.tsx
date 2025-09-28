@@ -6,6 +6,9 @@ import Image from "next/image";
 import Logo from "../public/assets/logo.png";
 import FeatureCard from "../components/FeatureCard";
 import Link from "next/link";
+import Footer from "@/components/Footer";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const whyByteCode = [
   {
@@ -93,11 +96,14 @@ const features = [
   },
 ];
 
+
+
 const Landing = () => {
+  const { user, logout } = useAuth();
   const [showContent, setShowContent] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
   const containerRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 1200);
@@ -112,12 +118,11 @@ const Landing = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % 3);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+ useEffect(() => {
+    if (user) {
+      router.push("/home"); // ✅ redirects logged-in users
+    }
+  }, [user, router]);
 
   return (
     <div
@@ -145,7 +150,7 @@ const Landing = () => {
       </div>
 
       {/* Floating Particles */}
-      <div className="absolute inset-0">
+      {/* <div className="absolute inset-0">
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
@@ -165,7 +170,7 @@ const Landing = () => {
             }}
           />
         ))}
-      </div>
+      </div> */}
 
       {/* Logo + App Name */}
       <motion.div
@@ -210,7 +215,7 @@ const Landing = () => {
       {/* Main Content */}
       <AnimatePresence>
         {showContent && (
-          <motion.div
+          <><motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
@@ -272,7 +277,7 @@ const Landing = () => {
                   onClick={() => {
                     const nextSection = document.querySelector("#why-bytecode");
                     nextSection?.scrollIntoView({ behavior: "smooth" });
-                  }}
+                  } }
                   className="p-3 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300"
                 >
                   <svg
@@ -286,8 +291,7 @@ const Landing = () => {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M19 9l-7 7-7-7"
-                    />
+                      d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
               </motion.div>
@@ -417,9 +421,12 @@ const Landing = () => {
                 Get Started Today - It's Free!
               </motion.button>
             </motion.section>
-          </motion.div>
+          </motion.div><Footer></Footer></>
         )}
+
       </AnimatePresence>
+
+      
     </div>
   );
 };
