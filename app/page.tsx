@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Logo from "../public/assets/logo.png";
 import FeatureCard from "../components/FeatureCard";
+import Link from "next/link";
 
 const whyByteCode = [
   {
@@ -244,7 +245,7 @@ const Landing = () => {
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-lg font-semibold flex items-center gap-2"
                 >
-                  Login
+                  <Link href="/auth/login">Login</Link>
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05, y: -2 }}
